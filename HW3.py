@@ -23,6 +23,9 @@ zvar.set("Z-Coordinate")
 x = Entry(master, highlightbackground='black')
 y = Entry(master, highlightbackground='black')
 z = Entry(master, highlightbackground='black')
+x.insert(END, '0')
+y.insert(END, '0')
+z.insert(END, '0')
 
 xlabel.pack()
 x.pack()
@@ -63,9 +66,27 @@ def run():
     print("done")
 
 def callback():
-    run()
+	testx = int(x.get())
+	testy = int(y.get())
+	testz = int(z.get())
 
-b = Button(master, text="Play!", width=10, command=callback, highlightbackground='black')
+	if testx > 25 or testx < -25 or testy > 25 or testy < -25 or testz > 25 or testz < -25:
+		print("Input out of bound. Please make sure they are less than |25|.")
+	else:
+		run()
+
+def is_int():
+	try:
+		testx = int(x.get())
+		testy = int(y.get())
+		testz = int(z.get())
+		callback();
+		return True
+	except:
+		print("Please only enter integers.")
+		return False
+
+b = Button(master, text="Play!", width=10, command=is_int, highlightbackground='black')
 b.pack()
 
 
