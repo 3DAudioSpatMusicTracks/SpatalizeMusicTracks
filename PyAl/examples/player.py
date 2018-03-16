@@ -36,7 +36,7 @@ def run():
 
     al.alSourcef(source, al.AL_PITCH, 1)
     al.alSourcef(source, al.AL_GAIN, 1)
-    al.alSource3f(source, al.AL_POSITION, 10, 0, 0)
+    al.alSource3f(source, al.AL_POSITION, 0, 10, 0)
     al.alSource3f(source, al.AL_VELOCITY, 0, 0, 0)
     al.alSourcei(source, al.AL_LOOPING, 1)
 
@@ -52,7 +52,7 @@ def run():
     z = 10
     while z > -10:
         time.sleep(1)
-        al.alSource3f(source, al.AL_POSITION, z, 0, 0)
+        al.alSource3f(source, al.AL_POSITION, 0, 0, z)
         print("playing at %r" % ([z, 0, 0]))
         z -= 1
     print("done")
