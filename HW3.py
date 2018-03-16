@@ -1,4 +1,6 @@
 from Tkinter import *
+from openal.audio import SoundSink, SoundSource
+from openal.loaders import load_wav_file
 
 master = Tk()
 
