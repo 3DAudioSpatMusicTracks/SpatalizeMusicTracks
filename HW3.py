@@ -1,9 +1,12 @@
 import os
 import sys
 import time
+import pygame
 from Tkinter import *
 from openal.audio import SoundSink, SoundSource
 from openal.loaders import load_wav_file
+import numpy as np
+import scipy.io.wavfile, scipy.io
 
 master = Tk()
 master.title('Spatialize Music Tracks GUI')
@@ -47,6 +50,55 @@ def run():
     else:
         fname = sys.argv[1]
 
+    '''
+	#drumsFile = "Drums - Four Lights.wav"
+	#rhythmGuitarFile = "Rhythm Guitar - Four Lights.wav"
+
+	# bass = wave.open(bassFile, 'r')
+	bassFile = "hey.wav"
+	bassRate, bassData = scipy.io.wavfile.read(bassFile)
+
+	# Selecting HRTF for User (Double-Check)
+	HRTFToUse = tkFileDialog.askopenfilename()  # Opens Tkinter GUI and File Explorer for selecting .mat file
+	hrtf = scipy.io.loadmat(HRTFToUse)          # Opens file at stored path
+				                                # open(strip(HRTFToUse))
+
+	#print hrtf
+	hrir_l =  hrtf['hrir_l']
+	hrir_r = hrtf['hrir_r']
+	ITD = hrtf['ITD']
+
+	# 25 locations
+	negAzimuths = [-80, -65, -55, -45]
+	intervalsOf5 = np.arange(-40,45,5).tolist()
+	posAzimuths = [45 , 55 , 65, 80]
+	azimuths = negAzimuths + intervalsOf5 + posAzimuths
+
+	# 50 locations
+	rangeFrom0to49 = np.arange(0.0,50.0,1.0)
+	elevations = -45 + 5.625*rangeFrom0to49
+	elevations = elevations.tolist()
+
+	aIndex = 4; # Azimuth Index
+	eIndex = 1; # Elevation Index
+
+	# Initializing lists for .WAV input
+	wav_left = []
+	wav_right = []
+	soundToPlay = []
+
+	lft = np.squeeze(hrir_l[aIndex, eIndex, :])
+	rgt = np.squeeze(hrir_r[aIndex, eIndex, :])
+
+	delay = ITD[aIndex, eIndex];
+
+	if aIndex < 13:
+	    lft = np.transpose(lft).tolist() + np.zeros(np.arange(1,np.absolute(delay),1).shape).tolist()
+	    rgt = np.zeros(np.arange(1,np.absolute(delay),1).shape).tolist() + np.transpose(rgt).tolist()
+	else:
+	    lft = np.zeros(np.arange(1,np.absolute(delay),1).shape).tolist() + np.transpose(lft).tolist()
+	    rgt = np.transpose(rgt).tolist() + np.zeros(np.arange(1,np.absolute(delay),1).shape).tolist()
+	'''
     sink = SoundSink()
     sink.activate()
 
@@ -55,7 +107,7 @@ def run():
     zint = int(z.get())
     source = SoundSource(position=[xint, yint, zint])
     source.looping = False
-
+    
     data = load_wav_file(fname)
     source.queue(data)
 
