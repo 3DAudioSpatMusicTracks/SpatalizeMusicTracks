@@ -38,9 +38,9 @@ def motion(event):
 
 		dynamic_entry[int(colorVar.get())][0].delete(0, END)
 		dynamic_entry[int(colorVar.get())][1].delete(0, END)
-		
+
 		dynamic_entry[int(colorVar.get())][0].insert(0, (x - 255)/10)
-		dynamic_entry[int(colorVar.get())][1].insert(0, (255 - y)/10)
+		dynamic_entry[int(colorVar.get())][1].insert(0, (300 - y)/10)
 
 
 
@@ -168,4 +168,3 @@ for x in xrange(0,10):
 	wavNum = wavNum + 1
 
 mainloop()
-
