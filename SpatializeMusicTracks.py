@@ -83,10 +83,13 @@ mousearea.bind('<Button-1>', motion)
 def generateOutput():
 	listOfSounds = np.array([])
 	soundToPlay = np.array([])
+	i = 0
 
 	# create 3D sound given .WAV file and put into array
 	for file in listOfFiles:
-		aud.create3DAudio(file, listOfSounds)
+		if dynamic_entry[i][0] is None:
+			aud.create3DAudio(file, listOfSounds, dynamic_entry[i][0], dynamic_entry[i][1])
+		i = i + 1
 
 	# add all the sounds in the array and put into a variable
 	aud.addSounds(soundToPlay, listOfSounds)
@@ -139,10 +142,10 @@ def addfile(num):
 	dynamic_entry[num][1].insert(0, 0)
 	dynamic_entry[num][2].insert(0, 0)
 
-	listOfFiles[num-1] = filename
-	print(listOfFiles)
+	listOfFiles[num] = filename
+	#print(listOfFiles)
 
-	print (num)
+	#print (num)
 
 b = Button(filesarea, text="Generate!", width=10, command=generateOutput)
 b.grid(row=0,column=1)
@@ -155,7 +158,7 @@ w, h = 3, 100;
 dynamic_entry = [[0 for x in range(w)] for y in range(h)]
 colorVar = StringVar()
 colorVar.set(None)
-print colorVar.get()
+#print colorVar.get()
 wavNum = 0
 numoflabels = 1
 

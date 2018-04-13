@@ -41,16 +41,18 @@ import time
 def create3DAudio(filePath, listOfSounds, azimuth, elevation):
     # Open file at given path
     fileToRead = wave.open(filePath, "r")
+    print(azimuth)
+    print(elevation)
 
     # Read opened .WAV file and store the sample rate (usually 44100 Hz or 44.1 kHz) and the audio data
     sampleRate, readData = scipy.io.wavfile.read(filePath)
 
     # Take in command line arguments for the azimuth, elevation, and radius
-    programName = sys.argv[0]
-    arguments = sys.argv[1:]
-    azimuth = int(arguments[0])
-    elevation = int(arguments[1])
-    radius = arguments[2]
+    #programName = sys.argv[0]
+    #arguments = sys.argv[1:]
+    #azimuth = int(arguments[0])
+    #elevation = int(arguments[1])
+    radius = 5
 
     # Ask user to select HRTF
     HRTFToUse = askopenfilename(initialdir = "../CIPIC_hrtf_database/standard_hrir_database/subject_127", title = "Select HRTF")
