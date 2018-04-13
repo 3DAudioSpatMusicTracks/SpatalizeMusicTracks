@@ -115,7 +115,9 @@ def resetfile(num):
 
 def addfile(num):
 	global dynamic_labels, dynamic_radio, dynamic_entry, dynamic_mouseAreaIcons, listOfFiles
-	listOfFiles = np.array([])
+	listOfFiles = np.empty(10, str)
+	print(listOfFiles)
+
 
 	filename = tkFileDialog.askopenfilename(initialdir = "/",title = "Select file",filetypes = (("wav files","*.wav"),("all files","*.*")))
 	arr = filename.split("/")
@@ -138,7 +140,7 @@ def addfile(num):
 	dynamic_entry[num][1].insert(0, 0)
 	dynamic_entry[num][2].insert(0, 0)
 
-	listOfFiles.append(fileName)
+	listOfFiles[num-1] = filename
 
 	print (num)
 
