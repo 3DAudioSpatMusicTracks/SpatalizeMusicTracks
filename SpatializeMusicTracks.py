@@ -4,13 +4,12 @@ import time
 import math
 from Tkinter import *
 import Tkinter, Tkconstants, tkFileDialog
-from openal.audio import SoundSink, SoundSource
-from openal.loaders import load_wav_file
 import numpy as np
 import scipy.io.wavfile, scipy.io
 import audiofunctions as aud
 
 
+listOfFiles = [None] * 10
 master = Tk()
 master.title('Spatialize Music Tracks GUI')
 master.geometry('770x600')
@@ -114,9 +113,9 @@ def resetfile(num):
 
 
 def addfile(num):
-	global dynamic_labels, dynamic_radio, dynamic_entry, dynamic_mouseAreaIcons, listOfFiles
-	listOfFiles = np.empty(10, str)
-	print(listOfFiles)
+	global dynamic_labels, dynamic_radio, dynamic_entry, dynamic_mouseAreaIcons
+	#listOfFiles = np.empty(10, string)
+	#print(listOfFiles)
 
 
 	filename = tkFileDialog.askopenfilename(initialdir = "/",title = "Select file",filetypes = (("wav files","*.wav"),("all files","*.*")))
@@ -141,6 +140,7 @@ def addfile(num):
 	dynamic_entry[num][2].insert(0, 0)
 
 	listOfFiles[num-1] = filename
+	print(listOfFiles)
 
 	print (num)
 
