@@ -8,6 +8,7 @@ from openal.audio import SoundSink, SoundSource
 from openal.loaders import load_wav_file
 import numpy as np
 import scipy.io.wavfile, scipy.io
+import audiofunctions as aud
 
 
 master = Tk()
@@ -81,7 +82,18 @@ mousearea.bind('<Button-1>', motion)
 # 	# 	return False
 # # master.create_oval(10, 10, 80, 80, outline="gray", fill="gray", width=2)
 def generateOutput():
-	print "Insert 3D Audio part here XD"
+	listOfSounds = np.array([])
+	soundToPlay = np.array([])
+
+	# create 3D sound given .WAV file and put into array
+	for file in listOfFiles:
+		aud.create3DAudio(file, listOfSounds)
+
+	# add all the sounds in the array and put into a variable
+	aud.addSounds(soundToPlay, listOfSounds)
+
+	# play the particular sound
+	aud.playSound(soundToPlay, 44100)
 
 
 def resetfile(num):
@@ -102,7 +114,9 @@ def resetfile(num):
 
 
 def addfile(num):
-	global dynamic_labels, dynamic_radio, dynamic_entry, dynamic_mouseAreaIcons
+	global dynamic_labels, dynamic_radio, dynamic_entry, dynamic_mouseAreaIcons, listOfFiles
+	listOfFiles = np.array([])
+
 	filename = tkFileDialog.askopenfilename(initialdir = "/",title = "Select file",filetypes = (("wav files","*.wav"),("all files","*.*")))
 	arr = filename.split("/")
 	name1 = arr[len(arr)-1].split(".")
@@ -123,6 +137,9 @@ def addfile(num):
 	dynamic_entry[num][0].insert(0, 0)
 	dynamic_entry[num][1].insert(0, 0)
 	dynamic_entry[num][2].insert(0, 0)
+
+	listOfFiles.append(fileName)
+
 	print (num)
 
 b = Button(filesarea, text="Generate!", width=10, command=generateOutput)

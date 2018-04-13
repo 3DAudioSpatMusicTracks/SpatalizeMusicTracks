@@ -26,7 +26,7 @@ import Tkinter
 from tkFileDialog import *
 
 # Sound Libraries
-import soundfile as sf
+#import soundfile as sf
 import pyaudio
 import pygame
 import sounddevice as sd
@@ -35,10 +35,10 @@ import time
 ########################## Main ###################################
 
 # Ask user to select the track and store the file's path
-filePath = askopenfilename(initialdir = "./", title = "Select Track", filetypes = (("WAV files","*.WAV"),("All files","*.*")))
+# filePath = askopenfilename(initialdir = "./", title = "Select Track", filetypes = (("WAV files","*.WAV"),("All files","*.*")))
 
 
-def create3DAudio(azimuth, elevation, distance, sampleRate, readData)
+def create3DAudio(filePath, listOfSounds, azimuth, elevation):
     # Open file at given path
     fileToRead = wave.open(filePath, "r")
 
@@ -143,13 +143,15 @@ def create3DAudio(azimuth, elevation, distance, sampleRate, readData)
     soundToPlay = numpy.asarray(soundToPlay)
     soundToPlay = numpy.transpose(soundToPlay)
 
+    listOfSounds = np.concatenate(listOfSounds, soundToPlay)
+
     #scipy.io.wavfile.write("soundToPlay-mono.wav", sampleRate, soundToPlay)
 
-def addSounds(listOfSounds)
+def addSounds(soundToPlay, listOfSounds):
     for sound in listOfSounds:
         soundToPlay += sound
 
-def playSound(soundToPlay, sampleRate)
+def playSound(soundToPlay, sampleRate):
     # Playback the spatialized audio
     sd.play(soundToPlay, sampleRate)
     time.sleep(5)
