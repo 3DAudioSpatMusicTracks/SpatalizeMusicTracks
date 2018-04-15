@@ -81,18 +81,22 @@ mousearea.bind('<Button-1>', motion)
 # 	# 	return False
 # # master.create_oval(10, 10, 80, 80, outline="gray", fill="gray", width=2)
 def generateOutput():
-	listOfSounds = np.array([])
-	soundToPlay = np.array([])
+	#listOfSounds = np.array([])
+	listOfSounds = [None] * 10
+	soundToPlay = []
 	i = 0
 
 	# create 3D sound given .WAV file and put into array
 	for file in listOfFiles:
-		if dynamic_entry[i][0] is None:
-			aud.create3DAudio(file, listOfSounds, dynamic_entry[i][0], dynamic_entry[i][1])
+		# print("elevation", dynamic_entry[i][1].get())
+		# if dynamic_entry[i][0].get() != 0 & int(dynamic_entry[i][1].get()) != 0:
+		if file is not None:
+			aud.create3DAudio(file, listOfSounds, dynamic_entry[i][0].get(), dynamic_entry[i][1].get())
 		i = i + 1
 
 	# add all the sounds in the array and put into a variable
-	aud.addSounds(soundToPlay, listOfSounds)
+	soundToPlay = aud.addSounds(soundToPlay, listOfSounds)
+	#print(soundToPlay)
 
 	# play the particular sound
 	aud.playSound(soundToPlay, 44100)
@@ -121,7 +125,8 @@ def addfile(num):
 	#print(listOfFiles)
 
 
-	filename = tkFileDialog.askopenfilename(initialdir = "/",title = "Select file",filetypes = (("wav files","*.wav"),("all files","*.*")))
+	# filename = tkFileDialog.askopenfilename(initialdir = "/",title = "Select file",filetypes = (("wav files","*.wav"),("all files","*.*")))
+	filename = "../../Desktop/punk-200-mono.wav"
 	arr = filename.split("/")
 	name1 = arr[len(arr)-1].split(".")
 	name = name1[0]
@@ -142,6 +147,7 @@ def addfile(num):
 	dynamic_entry[num][1].insert(0, 0)
 	dynamic_entry[num][2].insert(0, 0)
 
+	#listOfFiles[num] = filename
 	listOfFiles[num] = filename
 	#print(listOfFiles)
 

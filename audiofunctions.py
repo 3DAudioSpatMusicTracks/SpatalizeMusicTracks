@@ -41,8 +41,11 @@ import time
 def create3DAudio(filePath, listOfSounds, azimuth, elevation):
     # Open file at given path
     fileToRead = wave.open(filePath, "r")
-    print(azimuth)
-    print(elevation)
+    #print("Azimuth, ", azimuth)
+    #print("Elevation, ", elevation)
+    #placeholders:
+    azimuth = 5
+    elevation = 4
 
     # Read opened .WAV file and store the sample rate (usually 44100 Hz or 44.1 kHz) and the audio data
     sampleRate, readData = scipy.io.wavfile.read(filePath)
@@ -55,8 +58,8 @@ def create3DAudio(filePath, listOfSounds, azimuth, elevation):
     radius = 5
 
     # Ask user to select HRTF
-    HRTFToUse = askopenfilename(initialdir = "../CIPIC_hrtf_database/standard_hrir_database/subject_127", title = "Select HRTF")
-
+    #HRTFToUse = askopenfilename(initialdir = "../CIPIC_hrtf_database/standard_hrir_database/subject_127", title = "Select HRTF")
+    HRTFToUse = "../../Desktop/CIPIC_hrtf_database/standard_hrir_database/subject_127/hrir_final.mat"
     # Load hrtf
     hrtf = scipy.io.loadmat(HRTFToUse)
 
@@ -142,18 +145,36 @@ def create3DAudio(filePath, listOfSounds, azimuth, elevation):
 
     # Creating two channel stereo audio array for playback
     soundToPlay = [wav_left, wav_right]
-    soundToPlay = numpy.asarray(soundToPlay)
-    soundToPlay = numpy.transpose(soundToPlay)
+    #soundToPlay = numpy.asarray(soundToPlay)
+    #soundToPlay = numpy.transpose(soundToPlay)
 
-    listOfSounds = np.concatenate(listOfSounds, soundToPlay)
+    #listOfSounds = numpy.concatenate(listOfSounds, soundToPlay)
+    #listOfSounds.append(soundToPlay)
+    listOfSounds.append(soundToPlay)
+    #print(listOfSounds)
+    #print(len(listOfSounds))
 
     #scipy.io.wavfile.write("soundToPlay-mono.wav", sampleRate, soundToPlay)
 
 def addSounds(soundToPlay, listOfSounds):
+    # print(len(soundToPlay))
     for sound in listOfSounds:
-        soundToPlay += sound
+        if sound is not None:
+            soundToPlay = soundToPlay + sound
+            # print(numpy.shape(sound))
+    return soundToPlay
 
 def playSound(soundToPlay, sampleRate):
+    soundToPlay = numpy.asarray(soundToPlay)
+    soundToPlay = numpy.transpose(soundToPlay).ravel()
+
+    # Normalizing audio to range between [-1,1]
+    min = soundToPlay.min()
+    max = soundToPlay.max()
+    normalized = (((soundToPlay-min)/(max-min)) * 2) - 1
+
     # Playback the spatialized audio
-    sd.play(soundToPlay, sampleRate)
+    scipy.io.wavfile.write("soundToPlay-mono.wav", sampleRate, normalized)
+
+    sd.play(normalized, sampleRate)
     time.sleep(5)
