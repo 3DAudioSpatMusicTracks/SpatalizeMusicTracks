@@ -28,7 +28,6 @@ from tkFileDialog import *
 # Sound Libraries
 #import soundfile as sf
 import pyaudio
-import pygame
 import sounddevice as sd
 import time
 
@@ -78,9 +77,6 @@ def create3DAudio(filePath, listOfSounds, azimuth, elevation):
     rangeFrom0to49 = numpy.arange(0.0,50.0,1.0)
     elevations = -45 + 5.625*rangeFrom0to49
     elevations = elevations.tolist()
-
-    #print azimuths
-    #print elevations
 
     # Initializing lists for .WAV input
     wav_left = []
@@ -145,28 +141,33 @@ def create3DAudio(filePath, listOfSounds, azimuth, elevation):
 
     # Creating two channel stereo audio array for playback
     soundToPlay = [wav_left, wav_right]
-    #soundToPlay = numpy.asarray(soundToPlay)
-    #soundToPlay = numpy.transpose(soundToPlay)
 
-    #listOfSounds = numpy.concatenate(listOfSounds, soundToPlay)
-    #listOfSounds.append(soundToPlay)
+    # sd.play(numpy.asarray(soundToPlay).ravel(), 44100)
+    # Append the new sound to the list of sounds
     listOfSounds.append(soundToPlay)
-    #print(listOfSounds)
-    #print(len(listOfSounds))
-
-    #scipy.io.wavfile.write("soundToPlay-mono.wav", sampleRate, soundToPlay)
 
 def addSounds(soundToPlay, listOfSounds):
-    # print(len(soundToPlay))
     for sound in listOfSounds:
         if sound is not None:
-            soundToPlay = soundToPlay + sound
-            # print(numpy.shape(sound))
+            soundToPlay = numpy.asarray(soundToPlay).ravel().tolist()
+            sound = numpy.asarray(sound).ravel().tolist()
+
+            # CHECKING USING ONE TRACK
+            if(len(soundToPlay) == 0):
+                soundToPlay = sound # THERE IS NOTHING IN SOUNDTOPLAY SO TRACK SHOULD ONLY PLAY ONCE
+            else:
+                soundToPlay = soundToPlay + sound
+            #soundToPlay = soundToPlay + sound
+
+            # print(sound)
+            # soundToPlay = [soundToPlay + sound for soundToPlay, sound in zip(soundToPlay, sound)]
+            # [x + y for x, y in zip(first, second)]
     return soundToPlay
 
 def playSound(soundToPlay, sampleRate):
+    # Change to numpy array to be able to play using sd.play
     soundToPlay = numpy.asarray(soundToPlay)
-    soundToPlay = numpy.transpose(soundToPlay).ravel()
+    soundToPlay = numpy.transpose(soundToPlay)
 
     # Normalizing audio to range between [-1,1]
     min = soundToPlay.min()
@@ -174,7 +175,7 @@ def playSound(soundToPlay, sampleRate):
     normalized = (((soundToPlay-min)/(max-min)) * 2) - 1
 
     # Playback the spatialized audio
-    scipy.io.wavfile.write("soundToPlay-mono.wav", sampleRate, normalized)
+    scipy.io.wavfile.write("mySound-mono.wav", sampleRate, normalized)
 
     sd.play(normalized, sampleRate)
     time.sleep(5)

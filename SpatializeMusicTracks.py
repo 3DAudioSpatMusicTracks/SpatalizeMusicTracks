@@ -125,8 +125,8 @@ def addfile(num):
 	#print(listOfFiles)
 
 
-	# filename = tkFileDialog.askopenfilename(initialdir = "/",title = "Select file",filetypes = (("wav files","*.wav"),("all files","*.*")))
-	filename = "../../Desktop/punk-200-mono.wav"
+	filename = tkFileDialog.askopenfilename(initialdir = "/",title = "Select file",filetypes = (("wav files","*.wav"),("all files","*.*")))
+	# filename = "../../Desktop/punk-200-mono.wav"
 	arr = filename.split("/")
 	name1 = arr[len(arr)-1].split(".")
 	name = name1[0]
