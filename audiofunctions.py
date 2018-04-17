@@ -15,6 +15,7 @@
 
 # Native Python library
 import sys
+import math
 
 # Signal Processing Libraries
 import wave
@@ -37,25 +38,79 @@ import time
 # Ask user to select the track and store the file's path
 #filePath = askopenfilename(initialdir = "./", title = "Select Track", filetypes = (("WAV files","*.WAV"),("All files","*.*")))
 
-def create3DAudio(filePath, azimuth, elevation):
+def convertCoord(x,y):
+    # Conditions for the four quadrants
+    x = int(x)
+    y = int(y)
+
+
+    result = 0
+    elevation = 0
+
+    if (x > 0 and y > 0):
+        result = numpy.arctan(float(x/y))
+        elevation = 8
+
+    elif (x > 0 and y < 0):
+        result = numpy.arctan(float(x/y) * -1)
+        elevation = 0
+
+    elif (x < 0 and y < 0):
+        result = numpy.arctan(float(x/abs(y)))
+        elevation = 0
+
+    elif (x < 0 and y > 0):
+        result = numpy.arctan(float(x/y))
+        elevation = 8
+
+    # print(math.degrees(result))
+
+    return [math.degrees(result), elevation, math.hypot(x,y)]
+
+def degToIndices(list):
+    # List of Azimuths (25 locations, as per the CIPIC database)
+    negAzimuths = [-80, -65, -55, -45]
+    intervalsOf5 = numpy.arange(-40,45,5).tolist()
+    posAzimuths = [45 , 55 , 65, 80]
+    azimuths = negAzimuths + intervalsOf5 + posAzimuths
+
+    count = 0
+
+    for x in azimuths:
+        print("COUNT:", count)
+        if(x >= list[0]):
+            result = count
+            break
+        count = count + 1
+
+    return [result, list[1], list[2]]
+
+
+def create3DAudio(filePath, x, y):
     # Open file at given path
     fileToRead = wave.open(filePath, "r")
 
+
     # Read opened .WAV file and store the sample rate (usually 44100 Hz or 44.1 kHz) and the audio data
     sampleRate, readData = scipy.io.wavfile.read(filePath)
+
+    azAndElev = degToIndices(convertCoord(x,y))
 
     # Take in command line arguments for the azimuth, elevation, and radius
     # programName = sys.argv[0]
     # arguments = sys.argv[1:]
     # azimuth = int(arguments[0])
     # elevation = int(arguments[1])
-    # azimuth = 24
-    # elevation = 8
-    radius = 5
+    azimuth = azAndElev[0]
+    elevation = azAndElev[1]
+    radius = abs(azAndElev[2])
+
+    print(azimuth)
+    print(elevation)
 
     # Ask user to select HRTF
-    # HRTFToUse = askopenfilename(initialdir = "../CIPIC_hrtf_database/standard_hrir_database/subject_127", title = "Select HRTF")
-    HRTFToUse = "../../Desktop/CIPIC_hrtf_database/standard_hrir_database/subject_127/hrir_final.mat"
+    HRTFToUse = askopenfilename(initialdir = "../CIPIC_hrtf_database/standard_hrir_database/subject_127", title = "Select HRTF")
+    # HRTFToUse = "../../Desktop/CIPIC_hrtf_database/standard_hrir_database/subject_127/hrir_final.mat"
 
     # Load hrtf
     hrtf = scipy.io.loadmat(HRTFToUse)
@@ -148,6 +203,9 @@ def create3DAudio(filePath, azimuth, elevation):
     min = soundToPlay.min()
     max = soundToPlay.max()
     normalized = (((soundToPlay-min)/(max-min)) * 2) - 1
+
+    normalized = normalized * (1 - (radius/100))
+
     # print normalized
     return normalized
 
