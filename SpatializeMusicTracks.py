@@ -83,7 +83,6 @@ mousearea.bind('<Button-1>', motion)
 def generateOutput():
 	#listOfSounds = np.array([])
 	listOfSounds = [None] * 10
-	soundToPlay = []
 	i = 0
 
 	# create 3D sound given .WAV file and put into array
@@ -91,16 +90,18 @@ def generateOutput():
 		# print("elevation", dynamic_entry[i][1].get())
 		# if dynamic_entry[i][0].get() != 0 & int(dynamic_entry[i][1].get()) != 0:
 		if file is not None:
-			aud.create3DAudio(file, listOfSounds, dynamic_entry[i][0].get(), dynamic_entry[i][1].get())
+			listOfSounds[i] = aud.create3DAudio(file, dynamic_entry[i][0].get(), dynamic_entry[i][1].get())
 		i = i + 1
 
 	# add all the sounds in the array and put into a variable
-	soundToPlay = aud.addSounds(soundToPlay, listOfSounds)
-	#print(soundToPlay)
-
+	# soundToPlay = aud.addSounds(soundToPlay, listOfSounds)
+	# print(soundToPlay)
+	# soundToPlay = aud.create3DAudio(listOfFiles[0], listOfSounds, dynamic_entry[0][0].get(), dynamic_entry[0][1].get())
 	# play the particular sound
+	soundToPlay = np.zeros((listOfSounds[0].shape))
+	# print(soundToPlay.shape)
+	soundToPlay = aud.addSounds(listOfSounds, soundToPlay)
 	aud.playSound(soundToPlay, 44100)
-
 
 def resetfile(num):
 	global colorVar
