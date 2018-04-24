@@ -43,29 +43,45 @@ def convertCoord(x,y):
     x = int(x)
     y = int(y)
 
+    print("Selected coordinates: ", x, ", ", y)
 
     result = 0
     elevation = 0
+    azimuth = 0
+    calc = 0;
 
+    # 1st Quadrant
     if (x > 0 and y > 0):
-        result = numpy.arctan(float(x/y))
+        print("ENTERED 1")
+        result = numpy.arctan(x/float(y))
         elevation = 8
 
-    elif (x > 0 and y < 0):
-        result = numpy.arctan(float(x/y) * -1)
-        elevation = 0
-
-    elif (x < 0 and y < 0):
-        result = numpy.arctan(float(x/abs(y)))
-        elevation = 0
-
+    # 2nd Quadrant
     elif (x < 0 and y > 0):
-        result = numpy.arctan(float(x/y))
+        print("ENTERED 2")
+        result = numpy.arctan(x/float(y))
         elevation = 8
 
-    # print(math.degrees(result))
+    # 3rd Quadrant
+    elif (x < 0 and y < 0):
+        print("ENTERED 3")
+        result = numpy.arctan(x/float(abs(y)))
+        elevation = 0
 
-    return [math.degrees(result), elevation, math.hypot(x,y)]
+    # 4th Quadrant
+    elif (x > 0 and y < 0):
+        print("ENTERED 4")
+        result = numpy.arctan(x/float(abs(y)))
+        elevation = 0
+
+    print("Coord conversion result: ", result)
+
+    azimuth = math.degrees(result)
+
+    print("Azimuth in degrees: ", azimuth)
+
+    # Azimuth, Elevation, Radius
+    return [azimuth, elevation, math.hypot(x,y)]
 
 def degToIndices(list):
     # List of Azimuths (25 locations, as per the CIPIC database)
@@ -77,12 +93,17 @@ def degToIndices(list):
     count = 0
 
     for x in azimuths:
-        print("COUNT:", count)
-        if(x >= list[0]):
+        if(x >= list[0] or count == 24):
+            # Finds the index of the number in the array closest to degrees
+            # specified.
             result = count
+            print("Selected index: ", count)
             break
         count = count + 1
 
+    # print(list[2])
+
+    # Azimuth, Elevation, Radius
     return [result, list[1], list[2]]
 
 
@@ -105,8 +126,9 @@ def create3DAudio(filePath, x, y):
     elevation = azAndElev[1]
     radius = abs(azAndElev[2])
 
-    print(azimuth)
-    print(elevation)
+    print("Azimuth: ", azimuth)
+    print("Elevation: ", elevation)
+    print("Radius: ", radius)
 
     # Ask user to select HRTF
     HRTFToUse = askopenfilename(initialdir = "../CIPIC_hrtf_database/standard_hrir_database/subject_127", title = "Select HRTF")
