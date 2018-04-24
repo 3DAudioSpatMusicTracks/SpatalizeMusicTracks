@@ -226,7 +226,10 @@ def create3DAudio(filePath, x, y):
     max = soundToPlay.max()
     normalized = (((soundToPlay-min)/(max-min)) * 2) - 1
 
-    normalized = normalized * (1 - (radius/100))
+    intensityFac = (26 - radius)/26
+    print("Intensity Factor: ", intensityFac)
+
+    normalized = normalized * intensityFac
 
     # print normalized
     return normalized
