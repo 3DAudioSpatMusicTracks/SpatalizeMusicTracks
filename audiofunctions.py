@@ -270,5 +270,6 @@ def addSounds(listOfSounds, soundToPlay):
 
 def playSound(soundToPlay, sampleRate):
     # Playback the spatialized audio
+    scipy.io.wavfile.write("spatializedsound.wav", sampleRate, normalized)
     sd.play(soundToPlay, sampleRate)
     time.sleep(5)
