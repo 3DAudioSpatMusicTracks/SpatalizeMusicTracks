@@ -42,44 +42,8 @@ def motion(event):
 		dynamic_entry[int(colorVar.get())][0].insert(0, (x - 255)/10)
 		dynamic_entry[int(colorVar.get())][1].insert(0, (300 - y)/10)
 
-
-
-
 mousearea.bind('<Button-1>', motion)
 
-# def is_int():
-# 	global numoflabels
-
-# 	for x in xrange(1,10):
-# 		newlabel = Label(filesarea, text="newlabel")
-# 		newradiobutton = Radiobutton(filesarea, text="One", variable=colorVar, value=numoflabels)
-# 		newxentry = Entry(filesarea, width=5)
-# 		newyentry = Entry(filesarea, width=5)
-# 		newzentry = Entry(filesarea, width=5)
-# 		dynamic_labels.append(newlabel)
-# 		dynamic_radio.append(newradiobutton)
-# 		dynamic_entry[numoflabels][0] = newxentry
-# 		dynamic_entry[numoflabels][1] = newyentry
-# 		dynamic_entry[numoflabels][2] = newzentry
-
-
-# 		newlabel.grid(row=numoflabels, column=0)
-# 		newradiobutton.grid(row=numoflabels, column=2)
-# 		newxentry.grid(row=numoflabels + 1, column=0)
-# 		newyentry.grid(row=numoflabels + 1, column=1)
-# 		newzentry.grid(row=numoflabels + 1, column=2)
-# 		numoflabels = numoflabels + 2
-
-# 	# try:
-# 	# 	testx = int(x.get())
-# 	# 	testy = int(y.get())
-# 	# 	testz = int(z.get())
-# 	# 	callback();
-# 	# 	return True
-# 	# except:
-# 	# 	print("Please only enter integers.")
-# 	# 	return False
-# # master.create_oval(10, 10, 80, 80, outline="gray", fill="gray", width=2)
 def generateOutput():
 	#listOfSounds = np.array([])
 	listOfSounds = [None] * 10
@@ -118,6 +82,9 @@ def resetfile(num):
 	dynamic_filebutton[num].configure(text="Add File")
 	dynamic_filebutton[num].configure(command=lambda name=num:addfile(name))
 	dynamic_mouseAreaIcons[num].destroy()
+
+	# Clears out file from list of files
+	listOfFiles[num] = None
 
 
 def addfile(num):
