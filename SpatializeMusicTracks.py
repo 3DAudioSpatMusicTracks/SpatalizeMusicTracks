@@ -11,7 +11,7 @@ import audiofunctions as aud
 
 listOfFiles = [None] * 10
 master = Tk()
-master.title('Spatialize Music Tracks GUI')
+master.title('Spatialize Music Tracks')
 master.geometry('770x600')
 
 filesarea = Canvas(master, width=300, height=550)
